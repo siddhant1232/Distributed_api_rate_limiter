@@ -1,0 +1,18 @@
+services:
+  # The Node.js API Service
+  - type: web
+    name: rate-limiter-api
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 60000
+      - key: RATE_LIMIT_MAX_REQUESTS
+        value: 10
+      - key: REDIS_URL
+        sync: false # Set securely in the Render dashboard using the Upstash URL
