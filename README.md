@@ -1,4 +1,4 @@
-//Distributed API Rate Limiter
+#Distributed API Rate Limiter
 
 This is a distributed API rate limiter built using Node.js, Express, and Redis.
 
