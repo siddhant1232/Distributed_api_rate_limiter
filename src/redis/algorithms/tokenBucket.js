@@ -1,11 +1,4 @@
 const { client } = require('../client');
-
-// Lua script to atomically update the token bucket.
-// KEYS[1]: bucket key
-// ARGV[1]: capacity (max tokens)
-// ARGV[2]: refill rate (tokens per ms)
-// ARGV[3]: current timestamp in ms
-// ARGV[4]: requested tokens (usually 1)
 const luaScript = `
   local key = KEYS[1]
   local capacity = tonumber(ARGV[1])
@@ -41,13 +34,7 @@ const luaScript = `
   end
 `;
 
-/**
- * Token Bucket Algorithm
- * @param {string} key - The unique identifier for the user/IP
- * @param {number} capacity - Maximum tokens in the bucket
- * @param {number} refillRatePerSecond - Tokens added per second
- * @returns {Promise<{allowed: boolean, remaining: number}>}
- */
+
 const tokenBucket = async (key, capacity, refillRatePerSecond) => {
   const redisKey = `rate_limit:token_bucket:${key}`;
   const refillRatePerMs = refillRatePerSecond / 1000;
@@ -64,7 +51,7 @@ const tokenBucket = async (key, capacity, refillRatePerSecond) => {
   return {
     allowed: result[0] === 1,
     remaining: result[1]
-  };
+  };  
 };
 
 module.exports = tokenBucket;
